@@ -18,7 +18,7 @@ class VideoCapture:
 
         self.print_values = print_values
         self.show_video = show_video
-        self.video_capture = cv2.VideoCapture(device_index)
+        self.video_capture = self._initialise_camera(device_index) 
         self.output_height = output_height
         self.output_width = output_width
         
@@ -26,6 +26,12 @@ class VideoCapture:
         
         # Capture while loop runs while true
         self.run_capture = True
+
+    def _initialise_camera(self, device_index:int) -> cv2.VideoCapture:
+        """
+        Wrapper to allow us to mock a camera for testing
+        """
+        return cv2.VideoCapture(device_index)
 
     def _resize_with_aspect_ratio(self, image:ndarray, width:int=None, height:int=None, inter:int=cv2.INTER_AREA):
 
@@ -57,6 +63,12 @@ class VideoCapture:
 
             cv2.imshow('Image', image)
             cv2.waitKey(1)
+
+    def _capture_frame(self) -> ndarray:
+        """
+        Wrapper to allow us to mock video input in tests without a camera.
+        """
+        return self.video_capture.read()
 
     def run(self) -> None:
 
