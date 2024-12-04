@@ -8,7 +8,7 @@ class VideoProcessor:
 
         pass
 
-    def process(self, image:ndarray) -> ndarray:
+    def process(self, image:ndarray) -> tuple[ndarray, int|str]:
 
         pass
 
@@ -37,12 +37,12 @@ class FaceDetection(VideoProcessor):
         # Convert color image to grayscale for Viola-Jones
         return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
-    def process(self, image:ndarray) -> ndarray:
+    def process(self, image:ndarray) -> tuple[ndarray,None]:
 
         pre_processed_image = self._preprocess(image)
         detected_faces = self.face_cascade.detectMultiScale(pre_processed_image)
         self._add_overlay_in_place(image, detected_faces)
-        return image
+        return (image,None)
 
 class FaceHorizontalPositionDetector(VideoProcessor):
 
