@@ -7,13 +7,15 @@ from video_operations.processing import VideoProcessor
 class VideoCapture:
 
     def __init__(
-            self, 
+            self,
+            show_video:Optional[bool]=False,
             device_index:Optional[int]=0,
             output_width:Optional[int]=None,
             output_height:Optional[int]=None,
             video_processors:Optional[list[VideoProcessor]]=list(),
         ) -> None:
 
+        self.show_video = show_video
         self.video_capture = cv2.VideoCapture(device_index)
         self.output_height = output_height
         self.output_width = output_width
@@ -57,8 +59,9 @@ class VideoCapture:
             # Capture frame-by-frame
             ret, frame = self.video_capture.read()
             processed_image = self._apply_video_processors(frame)
+
             if self.output_height or self.output_width:
-                resized_frame = self._resize_with_aspect_ratio(frame, height=self.output_height, width=self.output_width)
-                self._show_image(resized_frame)
-                continue
-            self._show_image(processed_image)
+                processed_image = self._resize_with_aspect_ratio(frame, height=self.output_height, width=self.output_width)
+
+            if self.show_video:
+                self._show_image(processed_image)
